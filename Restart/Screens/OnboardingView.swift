@@ -10,6 +10,9 @@ import SwiftUI
 struct OnboardingView: View {
     
     @AppStorage("onboarding") var isOnboardingviewActive = true
+    @State private var buttonWidth: Double = UIScreen.main.bounds.width - 80
+    @State private var buttonOffset: CGFloat = 0
+    @State private var isAnimating: Bool = false
     
     var body: some View {
         ZStack {
@@ -24,11 +27,14 @@ struct OnboardingView: View {
                          but how much we put into giving
                          """).font(.title3).foregroundColor(.white).fontWeight(.light).multilineTextAlignment(.center).padding(.horizontal, 10)
                 }
+                .opacity(isAnimating ? 1 : 0)
+                .offset(y: isAnimating ? 0 : -40)
+                .animation(.easeOut(duration: 1),value: isAnimating )
                 Spacer()
                 //MARK: Center
                 ZStack{
                     CircleGroupView(ShapeColor: .white, ShapeOpacity: 0.2)
-                    Image("character-1").resizable().scaledToFit()
+                    Image("character-1").resizable().scaledToFit().opacity(isAnimating ? 1 : 0).animation(.easeOut(duration: 0.5), value: isAnimating)
                     
                 }//Z1
                 Spacer()
@@ -39,30 +45,52 @@ struct OnboardingView: View {
                     Capsule().fill(Color.white.opacity(0.2))
                     Capsule().fill(Color.white.opacity(0.2)).padding(8)
                     
-                //Call-to-Action
+                    //Call-to-Action
                     Text("Get Started").foregroundColor(.white).font(.system(.title3, design: .rounded, weight: .bold)).offset(x: 20)
                     
-                //Capsule(dynamic width)
-                
+                    //Capsule(dynamic width)
+                    
                     HStack{
-                        Capsule().fill(Color("ColorRed")).frame(width: 80)
+                        Capsule().fill(Color("ColorRed")).frame(width: buttonOffset + 80)
                         Spacer()
                     }
-                //Circle draggable
+                    //Circle draggable
                     HStack {
                         ZStack{
                             Circle().fill(Color("ColorRed"))
                             Circle().fill(Color.black.opacity(0.15)).padding(8)
                             Image(systemName: "chevron.right.2").font(.system(size: 24, weight: .bold))
-                        }.foregroundColor(.white).frame(width: 80,height: 80,alignment: .center).onTapGesture {
-                            isOnboardingviewActive = false
-                        }
-                    Spacer()
+                        }.foregroundColor(.white).frame(width: 80,height: 80,alignment: .center).offset(x: buttonOffset).gesture(
+                            DragGesture()
+                                .onChanged({ gesture in
+                                    if gesture.translation.width > 0 && buttonOffset <= buttonWidth - 80{
+                                        buttonOffset = gesture.translation.width
+                                    }
+                                })
+                                .onEnded{ _ in
+                                    withAnimation(Animation.easeOut(duration: 0.4)){
+                                        if buttonOffset > buttonWidth/2 {
+                                            buttonOffset = buttonWidth - 80
+                                            isOnboardingviewActive = false
+                                        }
+                                        else
+                                        {
+                                            buttonOffset = 0
+                                            
+                                        }
+                                    }
+                                    
+                                }
+                        )//
+                        Spacer()
                     }
                     
-                }.frame(height: 80, alignment: .center).padding()//Zf
+                }.frame(width:buttonWidth ,height: 80, alignment: .center).padding().opacity(isAnimating ? 1 : 0).offset(y: isAnimating ? 0 : 40).animation(.easeOut(duration: 1), value: isAnimating)//Zf
             }//V
         }//Z
+        .onAppear(perform: {
+            isAnimating = true
+        })
     }
 }
 
