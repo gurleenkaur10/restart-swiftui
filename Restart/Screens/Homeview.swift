@@ -13,6 +13,8 @@ struct HomeView: View {
     @State private var isAnimating: Bool = false
     
     var body: some View {
+//        Color(.white)
+//            .ignoresSafeArea(.all, edges: .all)
         VStack(spacing: 20) {
             
             //MARK: Header
@@ -25,16 +27,21 @@ struct HomeView: View {
                 Image("character-2").resizable().scaledToFit().padding()
                     .offset(y: isAnimating ? 35 : -35)
                     .animation(
-                    Animation
-                        .easeInOut(duration: 4)
-                        .repeatForever()
-                    ,value: isAnimating
-                    )
+                        Animation
+                            .easeInOut(duration: 4)
+                            .repeatForever()
+                        ,value: isAnimating
+                        )
             }
             
             //MARK: Center
             
-            Text("The time that lead to mastery is dependent on the intensity of our focus.").font(.title).fontWeight(.light).foregroundColor(.secondary).multilineTextAlignment(.center).padding()
+            Text("The time that lead to mastery is dependent on the intensity of our focus.")
+                .font(.title)
+                .fontWeight(.light)
+                .foregroundColor(.gray)
+                .multilineTextAlignment(.center)
+                .padding()
             //MARK: Footer
             Spacer()
             
@@ -44,11 +51,15 @@ struct HomeView: View {
                 }
             }){
                 
-                Image(systemName: "arrow.triangle.2.circlepath.circle.fill").imageScale(.large)
+                Image(systemName: "arrow.triangle.2.circlepath.circle.fill")
+                    .imageScale(.large)
                 Text("Restart")
-                    .font(.system(.title3, design: .rounded)).fontWeight(.bold)
+                    .font(.system(.title3, design: .rounded))
+                    .fontWeight(.bold)
             }
-            .buttonStyle(.borderedProminent).buttonBorderShape(.capsule).controlSize(.large)
+            .buttonStyle(.borderedProminent)
+            .buttonBorderShape(.capsule)
+            .controlSize(.large)
         }.onAppear(perform: {
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.5 , execute: {
                 isAnimating = true

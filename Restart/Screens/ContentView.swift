@@ -22,13 +22,6 @@ struct ContentView: View {
                 HomeView()
             }
         }
-//        VStack {
-//            Image(systemName: "globe")
-//                .imageScale(.large)
-//                .foregroundColor(.accentColor)
-//            Text("Hello, world!")
-//        }
-//        .padding()
     }
 }
 

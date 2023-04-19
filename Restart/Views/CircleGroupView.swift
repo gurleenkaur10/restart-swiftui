@@ -14,8 +14,12 @@ struct CircleGroupView: View {
     @State private var isAnimating: Bool = false
     var body: some View {
         ZStack{
-            Circle().stroke(ShapeColor.opacity(ShapeOpacity), lineWidth: 40).frame(width: 260,height: 260,alignment: .center )
-            Circle().stroke(ShapeColor.opacity(ShapeOpacity),lineWidth: 80).frame(width: 260,height: 260,alignment: .center)
+            Circle()
+                .stroke(ShapeColor.opacity(ShapeOpacity), lineWidth: 40)
+                .frame(width: 260,height: 260,alignment: .center )
+            Circle()
+                .stroke(ShapeColor.opacity(ShapeOpacity),lineWidth: 80)
+                .frame(width: 260,height: 260,alignment: .center)
         }//Z2
         .blur(radius: isAnimating ? 0 : 10)
         .opacity(isAnimating ? 1 : 0)
